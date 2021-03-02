@@ -1,0 +1,5 @@
+<settings>
+	<category label="Autorun">
+		<setting id="enable_autorun" type="bool" label="Chọn CongGiao add-on tự động mở lên khi Kodi khởi động." default="false" />
+	</category>
+</settings>

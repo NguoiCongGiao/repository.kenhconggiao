@@ -1,0 +1,2 @@
+Version 0.1.9
+Compatible with Kodi up to version 19.
