@@ -1,2 +1,4 @@
 # KenhCongGiao
-Kenh Cong Giao tu YouTube - Catholic Channels from YouTube
+
+- Kênh Công Giáo từ YouTube
+- Vietnamese Catholic Channels from YouTube.

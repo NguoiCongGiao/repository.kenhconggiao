@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #coding=utf-8
 
-import xbmc, xbmcgui, xbmcplugin, xbmcaddon
+import xbmc, xbmcgui, xbmcplugin, xbmcaddon, xbmcvfs
 import urllib, sys, re, os
 
 KodiVersion = int(xbmc.getInfoLabel("System.BuildVersion")[:2])
@@ -16,13 +16,16 @@ plugin_handle = int(sys.argv[1])
 Addon_ID = xbmcaddon.Addon().getAddonInfo('id')
 mysettings = xbmcaddon.Addon(Addon_ID)
 Addon_Name = mysettings.getAddonInfo('name')
-home = xbmc.translatePath(mysettings.getAddonInfo('path'))
+if KodiVersion < 20:
+    home = xbmc.translatePath(mysettings.getAddonInfo('path'))
+else:
+    home = xbmcvfs.translatePath(mysettings.getAddonInfo('path'))
 icon = os.path.join(home, 'icon.png')
 fanart = os.path.join(home, 'fanart.jpg')
 
-CongGiaoList = 'https://raw.githubusercontent.com/NguoiCongGiao/repository.kenhconggiao/master/CongGiao.xml'
-youtube_icon = 'https://raw.githubusercontent.com/NguoiCongGiao/repository.kenhconggiao/master/youtube.png'
-settings_icon = 'https://raw.githubusercontent.com/NguoiCongGiao/repository.kenhconggiao/master/settings.png'
+CongGiaoList = 'https://raw.githubusercontent.com/NguoiCongGiao/KenhCongGiao/master/CongGiao.xml'
+youtube_icon = 'https://raw.githubusercontent.com/NguoiCongGiao/KenhCongGiao/master/youtube.png'
+settings_icon = 'https://raw.githubusercontent.com/NguoiCongGiao/KenhCongGiao/master/settings.png'
 
 def make_request(url):
 	if KodiVersion > 18:
@@ -47,7 +50,7 @@ def make_request(url):
 			pass
 
 def main():
-	addDir("[COLOR yellow]Tìm Trên YouTube[/COLOR]", 'plugin://plugin.video.youtube/kodion/search/input', None, youtube_icon, True)
+	addDir("[COLOR red]Tìm Trên YouTube[/COLOR]", 'plugin://plugin.video.youtube/kodion/search/input', None, youtube_icon, True)
 	addDir("[COLOR lime]Kênh Công Giáo Tìm Trên YouTube[/COLOR]", 'plugin://plugin.video.youtube/kodion/search/query/?q=cong%20giao&search_type=channel', None, fanart, True)
 	addDir('[COLOR magenta]Kênh Công Giáo Tuyển Chọn[/COLOR]', 'CongGiao', 1, icon, True)
 	addDir('[COLOR green]CongGiao - Settings[/COLOR]', 'NoLinkNeeded', 2, settings_icon, True)
@@ -55,6 +58,7 @@ def main():
 def CongGiao():
 	content = make_request(CongGiaoList)
 	content = ''.join(content.splitlines()).replace('\t', '')
+	#xbmc.log("Printing xml playlist: %s" % content, level=xbmc.LOGINFO)
 	match = re.compile('<item>(.+?)</item>').findall(content)
 	for item in match:
 		title = ""
